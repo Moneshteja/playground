@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -60,12 +61,23 @@
                     } else if (!this.playerJumping && this.playerY > 0) {
                         this.playerY -= 10;
                     }
+
                     this.hurdles.forEach(hurdle => {
                         hurdle.x -= hurdle.speed;
-                        if (this.playerY + 70 > hurdle.y && this.playerY < hurdle.y + hurdle.height && hurdle.x < 120) {
+                        if (
+                            this.playerY < hurdle.y + hurdle.height &&
+                            this.playerY + 70 > hurdle.y &&
+                            hurdle.x < 120 &&
+                            hurdle.x + hurdle.width > 0
+                        ) {
                             this.gameOver = true;
                         }
                     });
+
+                    if (this.playerY < 0 || this.playerY + 70 > 400) {
+                        this.gameOver = true;
+                    }
+
                     if (this.hurdles[0] && this.hurdles[0].x < -50) {
                         this.hurdles.shift();
                         this.createHurdle();
