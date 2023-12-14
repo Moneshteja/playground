@@ -1,102 +1,105 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Game</title>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XOXO Game</title>
     <style>
-        #game {
-            position: relative;
-            width: 600px;
-            height: 400px;
-            border: 1px solid black;
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
         }
-        .player {
-            position: absolute;
-            width: 70px;
-            height: 70px;
-            background-color: red;
+        .game {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            gap: 10px;
+            border: 2px solid #000;
+            padding: 10px;
+            background-color: #fff;
         }
-        .hurdle {
-            position: absolute;
-            background-color: #00ff00;
+        .cell {
+            width: 100px;
+            height: 100px;
+            border: 1px solid #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .cell:hover {
+            background-color: #e0e0e0;
+        }
+        .cell.active {
+            background-color: #e0e0e0;
         }
     </style>
 </head>
 <body>
-    <div id="app">
-        <div id="game">
-            <div class="player" :style="{ top: playerY + 'px' }"></div>
-            <div class="hurdle" v-for="(hurdle, index) in hurdles" :key="index" :style="{ left: hurdle.x + 'px', top: hurdle.y + 'px', width: hurdle.width + 'px', height: hurdle.height + 'px' }"></div>
-        </div>
-        <button @mousedown="jump" @mouseup="fall">Jump</button>
-        <p v-if="gameOver">Game Over - Score: {{ score }}</p>
-    </div>
-
+    <div class="game"></div>
     <script>
-        new Vue({
-            el: '#app',
-            data: {
-                playerY: 200,
-                playerJumping: false,
-                hurdles: [],
-                gameOver: false,
-                score: 0
-            },
-            created() {
-                this.createHurdle();
-                setInterval(this.update, 1000/60);
-                setInterval(this.incrementScore, 1000);
-            },
-            methods: {
-                jump() {
-                    this.playerJumping = true;
-                },
-                fall() {
-                    this.playerJumping = false;
-                },
-                update() {
-                    if (this.playerJumping && this.playerY < 330) {
-                        this.playerY += 10;
-                    } else if (!this.playerJumping && this.playerY > 0) {
-                        this.playerY -= 10;
-                    }
+        const cells = Array.from({ length: 9 }, () => null);
+        const cellElements = document.querySelectorAll('.cell');
+        const gameArea = document.querySelector('.game');
+        let currentPlayer = 'X';
+        let winner;
 
-                    this.hurdles.forEach(hurdle => {
-                        hurdle.x -= hurdle.speed;
-                        if (
-                            this.playerY < hurdle.y + hurdle.height &&
-                            this.playerY + 70 > hurdle.y &&
-                            hurdle.x < 120 &&
-                            hurdle.x + hurdle.width > 0
-                        ) {
-                            this.gameOver = true;
-                        }
-                    });
+        function checkForWinner() {
+            const winningCombinations = [
+                [0, 1, 2],
+                [3, 4, 5],
+                [6, 7, 8],
+                [0, 3, 6],
+                [1, 4, 7],
+                [2, 5, 8],
+                [0, 4, 8],
+                [2, 4, 6],
+            ];
 
-                    if (this.playerY < 0 || this.playerY + 70 > 400) {
-                        this.gameOver = true;
-                    }
-
-                    if (this.hurdles[0] && this.hurdles[0].x < -50) {
-                        this.hurdles.shift();
-                        this.createHurdle();
-                    }
-                },
-                createHurdle() {
-                    let height = Math.random() < 0.7 ? Math.floor(Math.random() * 250) + 50 : Math.floor(Math.random() * 100) + 50;
-                    this.hurdles.push({
-                        x: 600,
-                        y: Math.floor(Math.random() * (400 - height)),
-                        width: 50,
-                        height: height,
-                        speed: 2
-                    });
-                },
-                incrementScore() {
-                    this.score++;
+            for (const combination of winningCombinations) {
+                const [a, b, c] = combination;
+                if (cells[a] && cells[a] === cells[b] && cells[a] === cells[c]) {
+                    winner = cells[a];
+                    return true;
                 }
             }
+
+            return false;
+        }
+
+        function checkForDraw() {
+            return cells.every(cell => cell !== null);
+        }
+
+        function handleCellClick(index) {
+            if (winner || cells[index] !== null) {
+                return;
+            }
+
+            cells[index] = currentPlayer;
+            cellElements[index].classList.add('active');
+            cellElements[index].textContent = currentPlayer;
+
+            if (checkForWinner()) {
+                gameArea.classList.add('game-over');
+                alert(`Player ${winner} wins!`);
+            } else if (checkForDraw()) {
+                gameArea.classList.add('game-over');
+                alert('It\'s a draw!');
+            } else {
+                currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+            }
+        }
+
+        cellElements.forEach((cell, index) => {
+            cell.addEventListener('click', () => handleCellClick(index));
         });
     </script>
 </body>
