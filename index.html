@@ -14,55 +14,62 @@
         document.addEventListener("DOMContentLoaded", function () {
             var username = prompt("Enter Twitter username:");
 
-            // Get profile information
-            fetch(`https://nitter.net/api2/user/${username}`)
+            // Fetch user profile information
+            fetch(`https://api.twitter.com/2/users/by/username/${username}`)
+            .then(response => response.json())
+            .then(profileInfo => {
+                // Display profile information
+                console.log("Profile Information:");
+                console.log("Username: " + profileInfo.data.username);
+                console.log("Name: " + profileInfo.data.name);
+                console.log("Description: " + profileInfo.data.description);
+                console.log("Location: " + profileInfo.data.location);
+                console.log("Profile Image URL: " + profileInfo.data.profile_image_url);
+                console.log("Followers Count: " + profileInfo.data.public_metrics.followers_count);
+                console.log("Following Count: " + profileInfo.data.public_metrics.following_count);
+                console.log("Tweets Count: " + profileInfo.data.public_metrics.tweet_count);
+                console.log("");
+
+                // Fetch recent tweets
+                fetch(`https://api.twitter.com/2/tweets`, {
+                    headers: {
+                        'Authorization': 'Bearer YOUR_TWITTER_API_KEY', // This line can be removed if not needed
+                    }
+                })
                 .then(response => response.json())
-                .then(profileInfo => {
-                    // Display profile information
-                    console.log("Profile Information:");
-                    console.log("Username: " + profileInfo.username);
-                    console.log("Full Name: " + profileInfo.full_name);
-                    console.log("Bio: " + profileInfo.bio);
-                    console.log("Location: " + profileInfo.location);
-                    console.log("Profile Image URL: " + profileInfo.profile_image_url);
-                    console.log("Number of Tweets: " + profileInfo.stats.tweets);
-                    console.log("Number of Following: " + profileInfo.stats.following);
-                    console.log("Number of Followers: " + profileInfo.stats.followers);
-                    console.log("");
+                .then(tweets => {
+                    var finalTweets = [];
 
-                    // Get tweets
-                    fetch(`https://nitter.net/api2/tweets/user/${username}?count=5`)
-                        .then(response => response.json())
-                        .then(tweets => {
-                            var finalTweets = [];
+                    tweets.data.forEach(function (tweet) {
+                        var data = [tweet.id, tweet.text, tweet.created_at, tweet.public_metrics.like_count, tweet.public_metrics.reply_count];
+                        finalTweets.push(data);
+                    });
 
-                            tweets.forEach(function (tweet) {
-                                var data = [tweet.link, tweet.text, tweet.date, tweet.stats.likes, tweet.stats.comments];
-                                finalTweets.push(data);
-                            });
+                    // Create HTML table for tweets
+                    var table = document.createElement("table");
+                    var headerRow = table.insertRow(0);
 
-                            // Create HTML table for tweets
-                            var table = document.createElement("table");
-                            var headerRow = table.insertRow(0);
+                    ['ID', 'Text', 'Date', 'Like Count', 'Reply Count'].forEach(function (header) {
+                        var th = document.createElement("th");
+                        th.textContent = header;
+                        headerRow.appendChild(th);
+                    });
 
-                            ['Link', 'Text', 'Date', 'No_of_likes', 'No_of_tweets'].forEach(function (header) {
-                                var th = document.createElement("th");
-                                th.textContent = header;
-                                headerRow.appendChild(th);
-                            });
-
-                            finalTweets.forEach(function (tweetData) {
-                                var row = table.insertRow(-1);
-                                tweetData.forEach(function (cellData) {
-                                    var cell = row.insertCell(-1);
-                                    cell.textContent = cellData;
-                                });
-                            });
-
-                            // Display table
-                            document.body.appendChild(table);
+                    finalTweets.forEach(function (tweetData) {
+                        var row = table.insertRow(-1);
+                        tweetData.forEach(function (cellData) {
+                            var cell = row.insertCell(-1);
+                            cell.textContent = cellData;
                         });
+                    });
+
+                    // Display table
+                    document.body.appendChild(table);
                 });
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
         });
     </script>
 
