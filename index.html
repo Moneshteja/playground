@@ -1,106 +1,71 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XOXO Game</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f0f0f0;
-        }
-        .game {
-            display: grid;
-            grid-template-columns: repeat(3, 100px);
-            grid-template-rows: repeat(3, 100px);
-            gap: 10px;
-            border: 2px solid #000;
-            padding: 10px;
-            background-color: #fff;
-        }
-        .cell {
-            width: 100px;
-            height: 100px;
-            border: 1px solid #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 24px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .cell:hover {
-            background-color: #e0e0e0;
-        }
-        .cell.active {
-            background-color: #e0e0e0;
-        }
-    </style>
+    <title>Twitter Scraper</title>
 </head>
 <body>
-    <div class="game"></div>
+
+    <h1>Twitter Scraper</h1>
+
     <script>
-        const cells = Array.from({ length: 9 }, () => null);
-        const cellElements = document.querySelectorAll('.cell');
-        const gameArea = document.querySelector('.game');
-        let currentPlayer = 'X';
-        let winner;
+        document.addEventListener("DOMContentLoaded", function () {
+            var username = prompt("Enter Twitter username:");
 
-        function checkForWinner() {
-            const winningCombinations = [
-                [0, 1, 2],
-                [3, 4, 5],
-                [6, 7, 8],
-                [0, 3, 6],
-                [1, 4, 7],
-                [2, 5, 8],
-                [0, 4, 8],
-                [2, 4, 6],
-            ];
+            // Get profile information
+            fetch(`https://nitter.net/api2/user/${username}`)
+                .then(response => response.json())
+                .then(profileInfo => {
+                    // Display profile information
+                    console.log("Profile Information:");
+                    console.log("Username: " + profileInfo.username);
+                    console.log("Full Name: " + profileInfo.full_name);
+                    console.log("Bio: " + profileInfo.bio);
+                    console.log("Location: " + profileInfo.location);
+                    console.log("Profile Image URL: " + profileInfo.profile_image_url);
+                    console.log("Number of Tweets: " + profileInfo.stats.tweets);
+                    console.log("Number of Following: " + profileInfo.stats.following);
+                    console.log("Number of Followers: " + profileInfo.stats.followers);
+                    console.log("");
 
-            for (const combination of winningCombinations) {
-                const [a, b, c] = combination;
-                if (cells[a] && cells[a] === cells[b] && cells[a] === cells[c]) {
-                    winner = cells[a];
-                    return true;
-                }
-            }
+                    // Get tweets
+                    fetch(`https://nitter.net/api2/tweets/user/${username}?count=5`)
+                        .then(response => response.json())
+                        .then(tweets => {
+                            var finalTweets = [];
 
-            return false;
-        }
+                            tweets.forEach(function (tweet) {
+                                var data = [tweet.link, tweet.text, tweet.date, tweet.stats.likes, tweet.stats.comments];
+                                finalTweets.push(data);
+                            });
 
-        function checkForDraw() {
-            return cells.every(cell => cell !== null);
-        }
+                            // Create HTML table for tweets
+                            var table = document.createElement("table");
+                            var headerRow = table.insertRow(0);
 
-        function handleCellClick(index) {
-            if (winner || cells[index] !== null) {
-                return;
-            }
+                            ['Link', 'Text', 'Date', 'No_of_likes', 'No_of_tweets'].forEach(function (header) {
+                                var th = document.createElement("th");
+                                th.textContent = header;
+                                headerRow.appendChild(th);
+                            });
 
-            cells[index] = currentPlayer;
-            cellElements[index].classList.add('active');
-            cellElements[index].textContent = currentPlayer;
+                            finalTweets.forEach(function (tweetData) {
+                                var row = table.insertRow(-1);
+                                tweetData.forEach(function (cellData) {
+                                    var cell = row.insertCell(-1);
+                                    cell.textContent = cellData;
+                                });
+                            });
 
-            if (checkForWinner()) {
-                gameArea.classList.add('game-over');
-                alert(`Player ${winner} wins!`);
-            } else if (checkForDraw()) {
-                gameArea.classList.add('game-over');
-                alert('It\'s a draw!');
-            } else {
-                currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-            }
-        }
-
-        cellElements.forEach((cell, index) => {
-            cell.addEventListener('click', () => handleCellClick(index));
+                            // Display table
+                            document.body.appendChild(table);
+                        });
+                });
         });
     </script>
+
 </body>
 </html>
+
