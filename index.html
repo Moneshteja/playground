@@ -3,61 +3,70 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Your Name - Portfolio</title>
+<title>Monesh's Portfolio</title>
 <style>
-  body { font-family: Arial, sans-serif; line-height: 1.6; }
-  .container { width: 80%; margin: auto; overflow: hidden; }
-  header { background: #50b3a2; color: white; padding-top: 30px; min-height: 70px; border-bottom: #e8491d 3px solid; }
-  header a { color: #ffffff; text-decoration: none; text-transform: uppercase; font-size: 16px; }
-  header ul { padding: 0; list-style: none; }
-  header li { display: inline; padding: 0 20px 0 20px; }
-  header #branding { float: left; }
-  header #branding h1 { margin: 0; }
-  header nav { float: right; margin-top: 10px; }
-  header .highlight, header .current a { color: #e8491d; font-weight: bold; }
-  header a:hover { color: #ffffff; font-weight: bold; }
+  body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #333; color: #fff; margin: 0; padding: 0; }
+  .container { max-width: 800px; margin: auto; padding: 40px; }
+  header { background: #50b3a2; color: white; padding: 20px 0; text-align: center; }
+  header h1 { margin: 0; }
+  nav ul { padding: 0; list-style-type: none; }
+  nav ul li { display: inline; margin-right: 20px; }
+  nav a { color: #ffffff; text-decoration: none; }
+  nav a:hover { color: #e8491d; }
+  section { padding: 20px 0; }
+  footer { background: #50b3a2; color: white; text-align: center; padding: 10px 0; }
+  .resume-box { background: #4169E1; padding: 10px; border-radius: 5px; margin: 20px 0; transition: background-color 0.5s; }
+  .resume-box:hover { background: #333; }
+  .resume-box a { color: #FF4500; text-decoration: none; }
+  .highlight { color: #e8491d; }
 </style>
 </head>
 <body>
   <header>
     <div class="container">
-      <div id="branding">
-        <h1><span class="highlight">Your</span> Portfolio</h1>
-      </div>
-      <nav>
-        <ul>
-          <li class="current"><a href="#biography">Biography</a></li>
-          <li><a href="https://moneshteja.github.io/resume/">Resume</a></li>
-          <li><a href="+918555812436">Contact</a></li>
-        </ul>
-      </nav>
+      <h1><span class="highlight">Monesh's</span> Portfolio</h1>
     </div>
   </header>
 
-  <section id="biography">
-    <div class="container">
-      <h2>Biography</h2>
-      <p>Your biography goes here. You can talk about your education, work experience, skills, and interests.</p>
-    </div>
+  <nav>
+    <ul>
+      <li><a href="#biography">Biography</a></li>
+      <li><a href="#resume">Resume</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <section id="biography" class="container">
+    <h2>Biography</h2>
+    <p>Your biography goes here. Talk about your education, work experience, skills, and interests.</p>
   </section>
 
-  <section id="resume">
-    <div class="container">
-      <h2>Resume</h2>
-      <p>Include a link to your resume here. You can host your resume as a PDF and link to it, or you can create an HTML version of your resume on this page.</p>
+  <section id="resume" class="container">
+    <h2>Resume</h2>
+    <div class="resume-box">
+      <a href="https://moneshteja.github.io/resume_access/MoneshTejaSanduru_2023 B.tech(cse).pdf" id="download-link">Download My Resume (PDF)</a>
     </div>
+    <h3>My Projects</h3>
+    <ul>
+      <li><a href="https://github.com/Moneshteja/engineering_project-">Engineering Project Source Files</a></li>
+      <li><a href="https://moneshteja.github.io/resume/">Resume Portal</a></li>
+      <li><a href="https://moneshteja.github.io/DynamicFieldValidationForm/">Dynamic Field Validation Form</a></li>
+      <li><a href="https://github.com/Moneshteja/Python_projects">Python Projects</a></li>
+      <li><a href="https://moneshteja.github.io/log-in-page/">Log In Page</a></li>
+      <li><a href="https://moneshteja.github.io/to-do-list/">To Do List</a></li>
+      <li><a href="https://moneshteja.github.io/qrcode_generator/">QR Code Generator</a></li>
+    </ul>
   </section>
 
-  <section id="contact">
-    <div class="container">
-      <h2>Contact</h2>
-      <p>Provide your contact details here. This could include your email address, phone number, or links to your professional social media profiles.</p>
-    </div>
+  <section id="contact" class="container">
+    <h2>Contact Me</h2>
+    <p>Email: <a href="mailto:moneshtejasanduru@gmail.com">moneshtejasanduru@gmail.com</a></p>
+    <p>Phone: +91 8555812436</p>
+    <p>LinkedIn: <a href="https://www.linkedin.com/in/monesh-teja-sanduru-849740290">Monesh's LinkedIn</a></p>
   </section>
 
   <footer>
-    <p>© 2024 Your Name</p>
+    <p>© 2024 Monesh Teja Sanduru</p>
   </footer>
 </body>
-        </html>
-        
+</html>
