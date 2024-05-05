@@ -5,20 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Monesh's Portfolio</title>
 <style>
-  body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #333; color: #fff; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #1a1a1a; color: #f0f0f0; margin: 0; padding: 0; }
   .container { max-width: 800px; margin: auto; padding: 40px; }
-  header { background: #50b3a2; color: white; padding: 20px 0; text-align: center; }
+  header { background: #0a0a0a; color: white; padding: 20px 0; text-align: center; position: fixed; width: 100%; top: 0; z-index: 1000; }
   header h1 { margin: 0; }
-  nav ul { padding: 0; list-style-type: none; }
+  nav ul { padding: 0; list-style-type: none; margin: 0; }
   nav ul li { display: inline; margin-right: 20px; }
-  nav a { color: #ffffff; text-decoration: none; }
-  nav a:hover { color: #e8491d; }
-  section { padding: 20px 0; }
-  footer { background: #50b3a2; color: white; text-align: center; padding: 10px 0; }
-  .resume-box { background: #4169E1; padding: 10px; border-radius: 5px; margin: 20px 0; transition: background-color 0.5s; }
-  .resume-box:hover { background: #333; }
-  .resume-box a { color: #FF4500; text-decoration: none; }
-  .highlight { color: #e8491d; }
+  nav a { color: #f0f0f0; text-decoration: none; }
+  nav a:hover, nav a.active { color: #50b3a2; }
+  section { padding: 60px 0; }
+  footer { background: #0a0a0a; color: white; text-align: center; padding: 10px 0; position: fixed; width: 100%; bottom: 0; z-index: 1000; }
+  .resume-box { background: #333; padding: 10px; border-radius: 5px; margin: 20px 0; transition: background-color 0.5s; }
+  .resume-box:hover { background: #50b3a2; }
+  .resume-box a { color: #f0f0f0; text-decoration: none; }
+  .highlight { color: #50b3a2; }
 </style>
 </head>
 <body>
@@ -30,7 +30,7 @@
 
   <nav>
     <ul>
-      <li><a href="#biography">Biography</a></li>
+      <li><a href="#biography" class="active">Biography</a></li>
       <li><a href="#resume">Resume</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
@@ -68,5 +68,19 @@
   <footer>
     <p>© 2024 Monesh Teja Sanduru</p>
   </footer>
+
+  <script>
+    // Get all the nav links
+    const navLinks = document.querySelectorAll('nav a');
+    // Add click event to each link
+    navLinks.forEach(link => {
+      link.addEventListener('click', function() {
+        // Remove active class from all links
+        navLinks.forEach(link => link.classList.remove('active'));
+        // Add active class to the clicked link
+        this.classList.add('active');
+      });
+    });
+  </script>
 </body>
 </html>
