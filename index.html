@@ -1,86 +1,92 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Monesh's Portfolio</title>
-<style>
-  body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #1a1a1a; color: #f0f0f0; margin: 0; padding: 0; }
-  .container { max-width: 800px; margin: auto; padding: 40px; }
-  header { background: #0a0a0a; color: white; padding: 20px 0; text-align: center; position: fixed; width: 100%; top: 0; z-index: 1000; }
-  header h1 { margin: 0; }
-  nav ul { padding: 0; list-style-type: none; margin: 0; }
-  nav ul li { display: inline; margin-right: 20px; }
-  nav a { color: #f0f0f0; text-decoration: none; }
-  nav a:hover, nav a.active { color: #50b3a2; }
-  section { padding: 60px 0; }
-  footer { background: #0a0a0a; color: white; text-align: center; padding: 10px 0; position: fixed; width: 100%; bottom: 0; z-index: 1000; }
-  .resume-box { background: #333; padding: 10px; border-radius: 5px; margin: 20px 0; transition: background-color 0.5s; }
-  .resume-box:hover { background: #50b3a2; }
-  .resume-box a { color: #f0f0f0; text-decoration: none; }
-  .highlight { color: #50b3a2; }
-</style>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Snake Game</title>
+	<style>
+		body {
+			background-color: #f0f0f0;
+		}
+		#gameCanvas {
+			border: 1px solid #000;
+		}
+	</style>
 </head>
 <body>
-  <header>
-    <div class="container">
-      <h1><span class="highlight">Monesh's</span> Portfolio</h1>
-    </div>
-  </header>
+	<canvas id="gameCanvas" width="300" height="300"></canvas>
+	<script>
+		let canvas = document.getElementById('gameCanvas');
+		let ctx = canvas.getContext('2d');
+		let snakeTrail = [];
+		let snakeX = snakeY = 10;
+		let velX = velY = 0;
+		let gridsize = 20;
+		let score = 0;
+		let foodX = foodY = 15;
 
-  <nav>
-    <ul>
-      <li><a href="#biography" class="active">Biography</a></li>
-      <li><a href="#resume">Resume</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-  </nav>
+		document.addEventListener('keydown', changeDirection);
 
-  <section id="biography" class="container">
-    <h2>Biography</h2>
-    <p>Your biography goes here. Talk about your education, work experience, skills, and interests.</p>
-  </section>
+		function changeDirection(e) {
+			let key = e.keyCode;
+			if (key == 37 && velX != 1) {
+				velX = -1;
+				velY = 0;
+			} else if (key == 39 && velX != -1) {
+				velX = 1;
+				velY = 0;
+			} else if (key == 38 && velY != 1) {
+				velX = 0;
+				velY = -1;
+			} else if (key == 40 && velY != -1) {
+				velX = 0;
+				velY = 1;
+			}
+		}
 
-  <section id="resume" class="container">
-    <h2>Resume</h2>
-    <div class="resume-box">
-      <a href="https://moneshteja.github.io/resume_access/MoneshTejaSanduru_2023 B.tech(cse).pdf" id="download-link">Download My Resume (PDF)</a>
-    </div>
-    <h3>My Projects</h3>
-    <ul>
-      <li><a href="https://github.com/Moneshteja/engineering_project-">Engineering Project Source Files</a></li>
-      <li><a href="https://moneshteja.github.io/resume/">Resume Portal</a></li>
-      <li><a href="https://moneshteja.github.io/DynamicFieldValidationForm/">Dynamic Field Validation Form</a></li>
-      <li><a href="https://github.com/Moneshteja/Python_projects">Python Projects</a></li>
-      <li><a href="https://moneshteja.github.io/log-in-page/">Log In Page</a></li>
-      <li><a href="https://moneshteja.github.io/to-do-list/">To Do List</a></li>
-      <li><a href="https://moneshteja.github.io/qrcode_generator/">QR Code Generator</a></li>
-    </ul>
-  </section>
+		function drawGame() {
+			ctx.fillStyle = '#f0f0f0';
+			ctx.fillRect(0, 0, canvas.width, canvas.height);
+			ctx.strokeStyle = '#000';
+			ctx.strokeRect(0, 0, canvas.width, canvas.height);
+			
+			let snakeX_next = snakeX + velX;
+			let snakeY_next = snakeY + velY;
+			
+			if (snakeX_next < 0 || snakeX_next >= gridsize || snakeY_next < 0 || snakeY_next >= gridsize) {
+				alert('Game Over!');
+				return;
+			}
+			
+			if (snakeX_next == foodX && snakeY_next == foodY) {
+				score++;
+				foodX = Math.floor(Math.random() * gridsize);
+				foodY = Math.floor(Math.random() * gridsize);
+			} else {
+				snakeTrail.shift();
+			}
+			
+			snakeTrail.push([snakeX_next, snakeY_next]);
+			snakeX = snakeX_next;
+			snakeY = snakeY_next;
+			
+			ctx.fillStyle = '#fff';
+			for (let i = 0; i < snakeTrail.length; i++) {
+				ctx.fillRect(snakeTrail[i][0] * 20, snakeTrail[i][1] * 20, 20, 20);
+			}
+			
+			ctx.fillStyle = '#f00';
+			ctx.fillRect(foodX * 20, foodY * 20, 20, 20);
+			
+			ctx.fillStyle = '#000';
+			ctx.font = '24px Arial';
+			ctx.textAlign = 'left';
+			ctx.textBaseline = 'top';
+			ctx.fillText('Score: ' + score, 10, 10);
+		}
 
-  <section id="contact" class="container">
-    <h2>Contact Me</h2>
-    <p>Email: <a href="mailto:moneshtejasanduru@gmail.com">moneshtejasanduru@gmail.com</a></p>
-    <p>Phone: +91 8555812436</p>
-    <p>LinkedIn: <a href="https://www.linkedin.com/in/monesh-teja-sanduru-849740290">Monesh's LinkedIn</a></p>
-  </section>
-
-  <footer>
-    <p>© 2024 Monesh Teja Sanduru</p>
-  </footer>
-
-  <script>
-    // Get all the nav links
-    const navLinks = document.querySelectorAll('nav a');
-    // Add click event to each link
-    navLinks.forEach(link => {
-      link.addEventListener('click', function() {
-        // Remove active class from all links
-        navLinks.forEach(link => link.classList.remove('active'));
-        // Add active class to the clicked link
-        this.classList.add('active');
-      });
-    });
-  </script>
+		setInterval(drawGame, 1000 / 10);
+	</script>
 </body>
 </html>
