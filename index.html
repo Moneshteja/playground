@@ -1,45 +1,61 @@
-<!--this is the html with boomi process hitting-->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Send POST Request</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch API Example</title>
 </head>
 <body>
-    <h1>Send a Text Message via POST</h1>
-    <form id="postForm">
-        <label for="message">Enter your message:</label><br>
-        <textarea id="message" name="message" rows="4" cols="50"></textarea><br><br>
-        
-        <button type="button" onclick="sendPostRequest()">Send POST Request</button>
-    </form>
 
-    <div id="response" style="margin-top:20px; color:green;"></div>
+    <h1>Send Data Using Fetch API</h1>
+
+    <!-- Input form for the message -->
+    <textarea id="message" placeholder="Enter your message here..."></textarea><br>
+    <button id="sendBtn">Send Message</button>
 
     <script>
-        function sendPostRequest() {
-            const url = "http://DESKTOP-IKCKDT9:9090/ws/simple/getSample";
-            const textMessage = document.getElementById("message").value;
+        // Function to send a POST request with message data
+        document.getElementById('sendBtn').addEventListener('click', function() {
+            // Get the message input
+            const message = document.getElementById('message').value;
 
-            fetch(url, {
-                method: "POST",
+            // Validate input
+            if (!message) {
+                alert('Please enter a message.');
+                return;
+            }
+
+            // API URL (replace with your actual endpoint)
+            const apiUrl = 'https://example.com/api/endpoint';
+
+            // Prepare the data to send
+            const data = { message: message };
+
+            // Make a POST request using Fetch API
+            fetch(apiUrl, {
+                method: 'POST',
                 headers: {
-                    "Content-Type": "text/plain" // Sending plain text
+                    'Content-Type': 'application/json',  // Ensure we're sending JSON
+                    'Authorization': 'Bearer YOUR_API_KEY'  // Optional: Use if authentication is required
                 },
-                body: textMessage // The text message
+                body: JSON.stringify(data)  // Convert the JavaScript object to a JSON string
             })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error("Network response was not ok: " + response.statusText);
+                    throw new Error('Request failed with status ' + response.status);
                 }
-                return response.text(); // Assuming the server responds with plain text
+                return response.json();
             })
             .then(data => {
-                document.getElementById("response").innerText = "Response: " + data;
+                console.log('Response:', data);  // Handle success
+                alert('Message sent successfully!');
             })
             .catch(error => {
-                document.getElementById("response").innerText = "Error: " + error.message;
+                console.error('Error:', error);  // Handle errors
+                alert('There was an error with the request.');
             });
-        }
+        });
     </script>
+
 </body>
 </html>
