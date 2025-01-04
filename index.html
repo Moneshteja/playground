@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Boomi API POST Request</title>
 </head>
 <body>
@@ -12,29 +13,28 @@
         <button type="submit">Submit</button>
     </form>
 
-    <div id="response"></div>
+    <div id="response" style="margin-top: 20px; color: blue;"></div>
 
     <script>
         document.getElementById('dataForm').addEventListener('submit', async function(event) {
             event.preventDefault();
 
             const inputData = document.getElementById('inputData').value;
-            const payload = { data: inputData };
 
             try {
                 const response = await fetch('https://c01-sg.integrate-test.boomi.com/ws/rest/github-boomi/github-boomi/', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'text/plain' // Set content type as plain text
                     },
-                    body: JSON.stringify(payload)
+                    body: inputData // Send the input data as plain text
                 });
 
                 if (response.ok) {
                     const textResponse = await response.text();
                     document.getElementById('response').innerText = 'Response: ' + textResponse;
                 } else {
-                    document.getElementById('response').innerText = 'Error: ' + response.statusText;
+                    document.getElementById('response').innerText = 'Error: ' + response.status + ' - ' + response.statusText;
                 }
             } catch (error) {
                 document.getElementById('response').innerText = 'Fetch error: ' + error.message;
