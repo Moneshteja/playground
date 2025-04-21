@@ -24,8 +24,6 @@
       position: absolute;
       width: 50px;
       height: 50px;
-      background-image: url('https://i.imgur.com/6oK3ZzB.png'); /* Replace with your geek image URL */
-      background-size: cover;
       cursor: pointer;
     }
     #scoreBoard {
@@ -51,7 +49,7 @@
   <div id="timer">Time Left: 30s</div>
   <button id="startBtn">Start Game</button>
   <div id="gameArea">
-    <div id="geek"></div>
+    <img id="geek" src="https://example.com/original-image.png" alt="Geek Character">
   </div>
 
   <script>
@@ -60,6 +58,9 @@
     const scoreBoard = document.getElementById('scoreBoard');
     const timerDisplay = document.getElementById('timer');
     const startBtn = document.getElementById('startBtn');
+
+    const originalImage = 'https://www.google.com/imgres?imgurl=https%3A%2F%2Fi.pinimg.com%2F736x%2F77%2F5e%2Ffb%2F775efb0796c645e1e6c8422fa7ec52bb.jpg&tbnid=NY5DTCk802aNmM&vet=1&imgrefurl=https%3A%2F%2Fwww.pinterest.com%2Fpin%2F559220478731500914%2F&docid=7hf8YrnuCjWgrM&w=728&h=790&hl=en-US&source=sh%2Fx%2Fim%2Fm6%2F4&kgs=402fba2be287ed73'; // Replace with your original image URL
+    const clickedImage = 'https://images.app.goo.gl/YM7bJknmsXQnuid56';   // Replace with your clicked image URL
 
     let score = 0;
     let timeLeft = 30;
@@ -82,6 +83,7 @@
       timerDisplay.textContent = 'Time Left: ' + timeLeft + 's';
       startBtn.disabled = true;
       geek.style.display = 'block';
+      geek.src = originalImage;
 
       moveGeek();
       moveInterval = setInterval(moveGeek, 1000);
@@ -102,6 +104,10 @@
     geek.addEventListener('click', () => {
       score++;
       scoreBoard.textContent = 'Score: ' + score;
+      geek.src = clickedImage;
+      setTimeout(() => {
+        geek.src = originalImage;
+      }, 500); // Revert after 0.5 second
     });
 
     startBtn.addEventListener('click', startGame);
